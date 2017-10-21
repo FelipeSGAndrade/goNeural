@@ -48,29 +48,10 @@ function processOutput(outputs) {
   if(outputs.length !== 4)
     throw new Error('Invalid output length');
 
-  let command = 0;
-  let greater = outputs[0];
-
-  outputs.forEach((output, index) => {
-    if(output > greater){
-      greater = output;
-      command = index;
-    }
-  });
-
-  switch(command) {
-    case 0: right();
-      break;
-
-    case 1: left();
-      break;
-
-    case 2: up();
-      break;
-
-    case 3: down();
-      break;
-  }
+  if(outputs[0] === 1) right();
+  else if(outputs[1] === 1) left();
+  else if(outputs[2] === 1) up();
+  else if(outputs[3] === 1) down();
 }
 
 function randomCommand() {
@@ -126,7 +107,7 @@ function initialize() {
 
   drawPlayer();
 
-  //setInterval(update, 2000)
+  setInterval(update, 2000)
 }
 
 window.onload = initialize;
