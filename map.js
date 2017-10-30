@@ -32,4 +32,4 @@ const mapManager = {
       }
     }
   }
-}
+};

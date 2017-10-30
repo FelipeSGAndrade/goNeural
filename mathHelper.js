@@ -14,4 +14,4 @@ const MathHelper = {
   random: (min, max) => {
     return (Math.random() * max) + min;
   }
-}
+};

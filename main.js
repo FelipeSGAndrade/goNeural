@@ -41,17 +41,17 @@ function getInputs() {
   inputFirstRow[playerX] = 2;
   const input = inputFirstRow.concat(inputSecondRow);
 
-  return input.map((value) => value * 5)
+  return input.map((value) => value * 5);
 }
 
 function processOutput(outputs) {
   if(outputs.length !== 4)
     throw new Error('Invalid output length');
 
-  if(outputs[0] === 1) right();
-  else if(outputs[1] === 1) left();
-  else if(outputs[2] === 1) up();
-  else if(outputs[3] === 1) down();
+  if(outputs[0]) right();
+  else if(outputs[1]) left();
+  else if(outputs[2]) up();
+  else if(outputs[3]) down();
 }
 
 function randomCommand() {
@@ -107,7 +107,7 @@ function initialize() {
 
   drawPlayer();
 
-  setInterval(update, 2000)
+  setInterval(update, 2000);
 }
 
 window.onload = initialize;

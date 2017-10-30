@@ -38,6 +38,6 @@ const NeuralLayer = {
 
         return sum;
       }
-    }
+    };
   }
-}
+};

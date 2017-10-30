@@ -15,7 +15,7 @@ const NeuralNetwork = {
       this.layers.push(NeuralLayer.create(inputCount, nodeCount, this.activationFunctions[index]));
     });
 
-    console.log("arests count:", this.arestsCount)
+    console.log("arests count:", this.arestsCount);
   },
   processInputs: function(inputs) {
     if(!inputs.length || inputs.length !== this.topology[0]) {
@@ -31,6 +31,6 @@ const NeuralNetwork = {
     console.log(processed);
     return processed;
   },
-}
+};
 
 NeuralNetwork.initialize();
