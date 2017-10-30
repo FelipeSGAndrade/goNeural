@@ -1,21 +1,21 @@
 "use strict";
 
-const mapManager = {
-  mapHeight: 0,
-  mapWidth: 0,
-  playerStart: [2, 0],
-  map: [
-    [0,0,0,0,0],
-    [1,0,0,0,1],
-    [0,0,1,0,0],
-    [1,0,0,0,1],
-    [1,1,0,1,1],
-    [0,0,0,0,0]
-  ],
-  draw: function(game, size) {
-    const map = this.map;
-    this.mapHeight = map.length;
-    this.mapWidth = map[0].length;
+const CreateMapManager = function () {
+  let mapHeight = 0;
+  let mapWidth = 0;
+  const playerStart = [2, 0];
+  const map = [
+      [0,0,0,0,0],
+      [1,0,0,0,1],
+      [0,0,1,0,0],
+      [1,0,0,0,1],
+      [1,1,0,1,1],
+      [0,0,0,0,0]
+    ];
+
+  function draw(game, size) {
+    mapHeight = map.length;
+    mapWidth = map[0].length;
 
     for(let i = 0; i < map.length; i++) {
       for(let j = 0; j < map[i].length; j++) {
@@ -28,8 +28,16 @@ const mapManager = {
           game.append(line);
         }
 
-        if(map[i].length > this.mapWidth) this.mapWidth = map[i].length;
+        if(map[i].length > mapWidth) mapWidth = map[i].length;
       }
     }
-  }
+  };
+
+  return {
+    get mapHeight () { return mapHeight; },
+    get mapWidth () { return mapWidth; },
+    get playerStart () { return playerStart; },
+    get map () { return map; },
+    draw: draw
+  };
 };

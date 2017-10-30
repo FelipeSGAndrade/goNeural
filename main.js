@@ -8,17 +8,14 @@ let player;
 let playerX = 0;
 let playerY = 0;
 
-function clamp(value, min, max) {
-  if (value > max) return max;
-  else if (value < min) return min;
-  return value;
-}
+let neuralNetwork;
+let mapManager;
 
 function update() {
   //randomCommand();
   const inputs = getInputs();
   console.log(inputs);
-  const outputs = NeuralNetwork.processInputs(inputs);
+  const outputs = neuralNetwork.processInputs(inputs);
 
   processOutput(outputs);
   drawPlayer();
@@ -72,26 +69,27 @@ function randomCommand() {
 }
 
 function right() {
-  playerX = clamp(playerX + 1, 0, mapManager.mapWidth - 1);
+  playerX = MathHelper.clamp(playerX + 1, 0, mapManager.mapWidth - 1);
   console.log('right');
 }
 
 function left() {
-  playerX = clamp(playerX - 1, 0, mapManager.mapWidth - 1);
+  playerX = MathHelper.clamp(playerX - 1, 0, mapManager.mapWidth - 1);
   console.log('left');
 }
 
 function up() {
-  playerY = clamp(playerY - 1, 0, mapManager.mapHeight - 1);
+  playerY = MathHelper.clamp(playerY - 1, 0, mapManager.mapHeight - 1);
   console.log('up');
 }
 
 function down() {
-  playerY = clamp(playerY + 1, 0, mapManager.mapHeight - 1);
+  playerY = MathHelper.clamp(playerY + 1, 0, mapManager.mapHeight - 1);
   console.log('down');
 }
 
 function initialize() {
+  mapManager = CreateMapManager();
   player = document.getElementById('player');
 
   game = document.getElementById('game');
@@ -104,6 +102,8 @@ function initialize() {
 
   game.style.height = (mapManager.mapHeight * size) + 'px';
   game.style.width = ((mapManager.mapWidth * size) - 2) + 'px';
+
+  neuralNetwork = CreateNeuralNetwork();
 
   drawPlayer();
 
