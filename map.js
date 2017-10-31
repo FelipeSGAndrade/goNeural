@@ -33,11 +33,16 @@ const CreateMapManager = function () {
     }
   };
 
+  function mapPosition(x, y) {
+    return map[y][x];
+  }
+
   return {
     get mapHeight () { return mapHeight; },
     get mapWidth () { return mapWidth; },
     get playerStart () { return playerStart; },
     get map () { return map; },
+    mapPosition: mapPosition,
     draw: draw
   };
 };
