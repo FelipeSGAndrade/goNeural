@@ -14,9 +14,9 @@ const MathHelper = {
     return (x > 0) ? 1 : 0;
   },
   randomInt: (min, max) => {
-    return Math.floor((Math.random() * max) + min);
+    return Math.floor((Math.random() * (max - min)) + min);
   },
   random: (min, max) => {
-    return (Math.random() * max) + min;
+    return (Math.random() * (max - min)) + min;
   }
 };

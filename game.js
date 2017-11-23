@@ -1,10 +1,10 @@
 'use strict';
 
-const CreateGame = function (xoffset, yoffset, size, margin) {
+const CreateGame = function (xoffset, yoffset, size, margin, neuralNetwork) {
+  let log = false;
   let player;
   let playerX = 0;
   let playerY = 0;
-  let neuralNetwork;
   let mapManager;
   let game;
   let alive = true;
@@ -12,10 +12,11 @@ const CreateGame = function (xoffset, yoffset, size, margin) {
   function update() {
     //randomCommand();
     const inputs = getInputs();
-    console.log(inputs);
+    if (log) console.log(inputs);
     const outputs = neuralNetwork.processInputs(inputs);
 
-    alive = processOutput(outputs);
+    if (!processOutput(outputs))
+      endGame()
 
     drawPlayer();
   }
@@ -73,36 +74,41 @@ const CreateGame = function (xoffset, yoffset, size, margin) {
   function right() {
     const nextPlayerX = MathHelper.clamp(playerX + 1, 0, mapManager.mapWidth - 1);
     let test =  move(nextPlayerX, playerY);
-    console.log('right = ', test);
+    if (log) console.log('right = ', test);
     return test;
   }
 
   function left() {
     const nextPlayerX = MathHelper.clamp(playerX - 1, 0, mapManager.mapWidth - 1);
-    console.log('left');
+    if (log) console.log('left');
     return move(nextPlayerX, playerY);
   }
 
   function up() {
     const nextPlayerY = MathHelper.clamp(playerY - 1, 0, mapManager.mapHeight - 1);
-    console.log('up');
+    if (log) console.log('up');
     return move(playerX, nextPlayerY);
   }
 
   function down() {
     const nextPlayerY = MathHelper.clamp(playerY + 1, 0, mapManager.mapHeight - 1);
-    console.log('down');
+    if (log) console.log('down');
     return move(playerX, nextPlayerY);
   }
 
   function move(nextX, nextY) {
     if(nextX === playerX && nextY === playerY) return false;
-    console.log(mapManager.mapPosition(nextX, nextY));
+    if (log) console.log(mapManager.mapPosition(nextX, nextY));
     if (mapManager.mapPosition(nextX, nextY) !== 0) return false;
 
     playerX = nextX;
     playerY = nextY;
     return true;
+  }
+
+  function endGame() {
+    if(alive) alive = false
+    clearInterval(endInterval)
   }
 
   mapManager = CreateMapManager();
@@ -127,12 +133,14 @@ const CreateGame = function (xoffset, yoffset, size, margin) {
   game.style.height = (mapManager.mapHeight * size) + 'px';
   game.style.width = ((mapManager.mapWidth * size) - 2) + 'px';
 
-  neuralNetwork = CreateNeuralNetwork();
-
   drawPlayer();
 
+  let endInterval = setInterval(endGame, 5000)
+
   return {
+    set log(bool) { log = bool },
     get alive () { return alive; },
-    update: update
+    update: update,
+    neuralNetwork: neuralNetwork
   };
 };

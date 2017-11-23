@@ -2,15 +2,16 @@
 
 const CreateNeuralLayer = function (inputCount, nodeCount, activationFunction) {
 
+    let log = false;
     let weights = [];
     for(let i = 0; i < nodeCount; i++){
       weights.push([]);
       for(let j = 0; j < inputCount; j++) {
-        weights[i].push(MathHelper.random(-1, 2));
+        weights[i].push(MathHelper.random(-1, 1));
       }
     }
 
-    console.log('weigths:', weights);
+    if (log) console.log('weigths:', weights);
 
     function processInputs(inputs) {
       if(!inputs.length || inputs.length !== inputCount) {
@@ -33,11 +34,17 @@ const CreateNeuralLayer = function (inputCount, nodeCount, activationFunction) {
       return sum;
     };
 
+    const getFlatWeights = () => {
+        return [].concat.apply([], weights);
+    }
+
     return {
+      set log(bool) { log = bool },
       inputCount: inputCount,
       nodeCount: nodeCount,
       weights: weights,
       activationFunction: activationFunction || null,
-      processInputs: processInputs
+      processInputs: processInputs,
+      getFlatWeights: getFlatWeights
     };
 };

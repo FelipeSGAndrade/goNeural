@@ -1,6 +1,7 @@
 "use strict";
 
 const CreateNeuralNetwork = function (topology, activationFunctions) {
+  let log = false;
   topology = topology || [10, 10, 10, 8, 4];
   activationFunctions = activationFunctions || [null, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.boolean];
   let arestsCount = 0;
@@ -15,7 +16,7 @@ const CreateNeuralNetwork = function (topology, activationFunctions) {
     layers.push(CreateNeuralLayer(inputCount, nodeCount, activationFunctions[index]));
   });
 
-  console.log("arests count:", arestsCount);
+  if (log) console.log("arests count:", arestsCount);
 
   function processInputs(inputs) {
     if(!inputs.length || inputs.length !== topology[0]) {
@@ -24,19 +25,26 @@ const CreateNeuralNetwork = function (topology, activationFunctions) {
 
     let processed = inputs.slice();
     layers.forEach((layer) => {
-      console.log('input:', processed);
+      if (log) console.log('input:', processed);
       processed = layer.processInputs(processed);
     });
 
-    console.log(processed);
+    if (log) console.log(processed);
     return processed;
   };
 
+  function getFlatWeights() {
+    const layersWeights = layers.map((layer) => layer.getFlatWeights())
+    return [].concat.apply([], layersWeights)
+  }
+
   return {
+    set log(bool) { log = bool },
     topology: topology,
     activationFunctions: activationFunctions,
     arestsCount: arestsCount,
     layers: layers,
-    processInputs: processInputs
+    processInputs: processInputs,
+    getFlatWeights: getFlatWeights
   };
 };
