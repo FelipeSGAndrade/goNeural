@@ -2,57 +2,48 @@
 
 const CreateGeneticManager = () => {
 
-  const process = (inputGroup) => {
+    const process = (inputGroup) => {
 
-    const parent1 = randomSelection(inputGroup)
-    const parent2 = randomSelection(inputGroup)
+        const parent1 = randomSelection(inputGroup)
+        const parent2 = randomSelection(inputGroup)
 
-    const child = crossover(parent1, parent2)
+        const children = crossover(parent1, parent2)
 
-    const survivalGroup = inputGroup.splice(0, inputGroup.length - 1)
-    survivalGroup.push(child)
+        const survivalGroup = inputGroup.slice(0, inputGroup.length - 2)
+        survivalGroup.concat(children)
 
-    console.log(survivalGroup)
-
-    return survivalGroup
-  }
-
-  const randomSelection = (inputGroup) => {
-    return inputGroup[MathHelper.randomInt(0, inputGroup.length)]
-  }
-
-  const crossover = (parent1, parent2) => {
-    console.log(parent1)
-    console.log(parent2)
-
-    const parent1Weights = parent1.getFlatWeights();
-    const parent2Weights = parent2.getFlatWeights();
-
-    console.log(parent1Weights.length)
-    console.log(parent2Weights.length)
-
-    const minimumDivision = Math.floor(parent1Weights.length / 4)
-    const divisionPoint = MathHelper.randomInt(minimumDivision, parent1Weights.length - minimumDivision)
-
-    console.log(parent1Weights.length - minimumDivision)
-    console.log('min: ' + minimumDivision)
-    console.log('div: ' + divisionPoint)
-
-    const parent1Splice = parent1Weights.splice(0, divisionPoint)
-    const parent2Splice = parent2Weights.splice(divisionPoint)
-
-    console.log(parent1Splice.length)
-    console.log(parent2Splice.length)
-
-    const childWeights = parent1Splice.concat(parent2Splice)
-    console.log(childWeights.length)
-    return {
-      fitness: null,
-      weights: childWeights
+        return survivalGroup
     }
-  }
 
-  return {
-      process: process
-  }
+    const randomSelection = (inputGroup) => {
+        return inputGroup[MathHelper.randomInt(0, inputGroup.length)]
+    }
+
+    const crossover = (parent1, parent2) => {
+
+        const parent1Weights = parent1.weights
+        const parent2Weights = parent2.weights
+
+        const minimumDivision = Math.floor(parent1Weights.length / 4)
+        const divisionPoint = MathHelper.randomInt(minimumDivision, parent1Weights.length - minimumDivision)
+
+        const parent1Slice1 = parent1Weights.slice(0, divisionPoint)
+        const parent2Slice1 = parent2Weights.slice(divisionPoint)
+
+        const parent2Slice2 = parent2Weights.slice(0, divisionPoint)
+        const parent1Slice2 = parent1Weights.slice(divisionPoint)
+
+        const child1Weights = parent1Slice1.concat(parent2Slice1)
+        const child2Weights = parent2Slice2.concat(parent1Slice2)
+
+        return [{
+            weights: child1Weights
+        }, {
+            weights: child2Weights
+        }]
+    }
+
+    return {
+        process: process
+    }
 }
