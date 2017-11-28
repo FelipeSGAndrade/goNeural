@@ -8,14 +8,16 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
     let mapManager
     let game
     let alive = true
+    let ticks = 0
 
     function update() {
         //randomCommand()
         const inputs = getInputs()
         if (log) console.log(inputs)
         const outputs = neuralNetwork.processInputs(inputs)
+        ticks++
 
-        if (!processOutput(outputs))
+        if (!processOutput(outputs) || ticks > 5)
             endGame()
         else {
             neuralNetwork.fitness++
@@ -121,7 +123,6 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         if (neuralNetwork.fitness > 40) {
             alert("WOW")
         }
-        clearInterval(endInterval)
     }
 
     function clear() {
@@ -151,8 +152,6 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
     game.style.width = ((mapManager.mapWidth * size) - 2) + 'px'
 
     drawPlayer()
-
-    let endInterval = setInterval(endGame, 1000)
 
     return {
         set log(bool) {

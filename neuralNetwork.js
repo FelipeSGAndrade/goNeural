@@ -24,7 +24,6 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
             layerWeights = weights.splice(0, inputCount * nodeCount)
             if (layerWeights.length === 0)
                 debugger
-            console.log('flat:' + layerWeights.length)
         }
 
         arestsCount += inputCount * nodeCount

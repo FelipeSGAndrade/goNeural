@@ -4,15 +4,12 @@ const CreateGeneticManager = () => {
 
     const process = (inputGroup) => {
 
-        const parent1 = randomSelection(inputGroup)
-        const parent2 = randomSelection(inputGroup)
-
-        const children = crossover(parent1, parent2)
-
+        const crossoverQtd = (inputGroup.length / 2) - 2
+        const children = randomCrossovers(crossoverQtd, inputGroup)
         inputGroup.sort((item1, item2) => item2.fitness - item1.fitness)
 
         children.concat(crossover(inputGroup[0], inputGroup[1]))
-
+        console.log(children.length)
         const survivalGroup = inputGroup.slice(0, inputGroup.length - children.length)
         survivalGroup.concat(children)
 
@@ -26,6 +23,20 @@ const CreateGeneticManager = () => {
 
     const randomSelection = (inputGroup) => {
         return inputGroup[MathHelper.randomInt(0, inputGroup.length)]
+    }
+
+    const randomCrossovers = (quantity, inputGroup) => {
+
+        let children = []
+        for(let i = 0; i < quantity; i++) {
+
+            const parent1 = randomSelection(inputGroup)
+            const parent2 = randomSelection(inputGroup)
+
+            children = children.concat(crossover(parent1, parent2))
+        }
+
+        return children
     }
 
     const crossover = (parent1, parent2) => {
@@ -42,14 +53,26 @@ const CreateGeneticManager = () => {
         const parent2Slice1 = parent2Weights.slice(0, divisionPoint)
         const parent2Slice2 = parent2Weights.slice(divisionPoint)
 
-        const child1Weights = parent1Slice1.concat(parent2Slice2)
-        const child2Weights = parent2Slice1.concat(parent1Slice2)
+        const child1Weights = mutate(parent1Slice1.concat(parent2Slice2))
+        const child2Weights = mutate(parent2Slice1.concat(parent1Slice2))
 
         return [{
             weights: child1Weights
         }, {
             weights: child2Weights
         }]
+    }
+
+    const mutate = (childWeights) => {
+
+        const mutations = MathHelper.randomInt(0, 10)
+
+        for(let i = 0; i < mutations; i++) {
+            const gene = MathHelper.randomInt(0, childWeights.length)
+            childWeights[gene] = MathHelper.random(-1, 1)
+        }
+
+        return childWeights
     }
 
     return {

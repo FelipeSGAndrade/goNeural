@@ -4,6 +4,8 @@ let gameList = []
 let updateInterval
 let geneticManager
 let startAgain = true
+let gamesX = 10
+let gamesY = 10
 
 function update() {
     let updated = false
@@ -39,15 +41,15 @@ function startGames(flatNeuralNetworks) {
     flatNeuralNetworks = flatNeuralNetworks || []
     let neuralCount = 0
 
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 5; j++) {
+    for (let i = 0; i < gamesX; i++) {
+        for (let j = 0; j < gamesY; j++) {
             const neuralNetwork = CreateNeuralNetwork(flatNeuralNetworks[neuralCount] || null)
             gameList.push(CreateGame(j * 60, i * 80, 10, 20, neuralNetwork))
             neuralCount++
         }
     }
 
-    updateInterval = setInterval(update, 100)
+    updateInterval = setInterval(update, 5)
 }
 
 function initialize() {
