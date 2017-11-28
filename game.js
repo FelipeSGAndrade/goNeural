@@ -17,6 +17,9 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
 
         if (!processOutput(outputs))
             endGame()
+        else {
+            neuralNetwork.fitness++
+        }
 
         drawPlayer()
     }
@@ -26,6 +29,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         player.style.top = ((playerY * size)) + 'px'
 
         if (mapManager.map[playerY][playerX] === 1) player.style.color = 'red'
+        else if (playerY > 3) player.style.color = 'green'
         else player.style.color = 'black'
     }
 
@@ -112,7 +116,16 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
 
     function endGame() {
         if (alive) alive = false
+        neuralNetwork.fitness += playerY * 10
+
+        if (neuralNetwork.fitness > 40) {
+            alert("WOW")
+        }
         clearInterval(endInterval)
+    }
+
+    function clear() {
+        game.remove()
     }
 
     mapManager = CreateMapManager()
@@ -139,7 +152,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
 
     drawPlayer()
 
-    let endInterval = setInterval(endGame, 5000)
+    let endInterval = setInterval(endGame, 1000)
 
     return {
         set log(bool) {
@@ -149,6 +162,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
             return alive
         },
         update: update,
-        neuralNetwork: neuralNetwork
+        neuralNetwork: neuralNetwork,
+        clear: clear
     }
 }

@@ -6,7 +6,7 @@ const CreateNeuralLayer = function(inputCount, nodeCount, activationFunction, fl
     const weights = []
     for (let i = 0; i < nodeCount; i++) {
         if (flatWeights)
-            weights.push(flatWeights.splice(i * inputCount, inputCount))
+            weights.push(flatWeights.splice(0, inputCount))
         else {
             weights.push([])
             for (let j = 0; j < inputCount; j++)

@@ -6,6 +6,7 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
     let activationFunctions = [null, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.boolean]
     let weights = null
     let arestsCount = 0
+    let fitness = 0
     const layers = []
 
     if (flatNeuralNetworks) {
@@ -21,6 +22,8 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
         let layerWeights = null
         if (weights) {
             layerWeights = weights.splice(0, inputCount * nodeCount)
+            if (layerWeights.length === 0)
+                debugger
             console.log('flat:' + layerWeights.length)
         }
 
@@ -60,6 +63,7 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
         arestsCount: arestsCount,
         layers: layers,
         processInputs: processInputs,
-        getFlatWeights: getFlatWeights
+        getFlatWeights: getFlatWeights,
+        fitness: fitness
     }
 }

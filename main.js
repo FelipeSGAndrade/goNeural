@@ -17,11 +17,14 @@ function update() {
     if (!updated) {
         clearInterval(updateInterval)
 
-        if (!startAgain) return
+        //if (!startAgain) return
         startAgain = false
         const oldFlatNeuralNetworks = gameList.map((game) => {
+            game.clear()
+
             return {
-                weights: game.neuralNetwork.getFlatWeights()
+                weights: game.neuralNetwork.getFlatWeights(),
+                fitness: game.neuralNetwork.fitness
             }
         })
 
@@ -44,7 +47,7 @@ function startGames(flatNeuralNetworks) {
         }
     }
 
-    updateInterval = setInterval(update, 1000)
+    updateInterval = setInterval(update, 100)
 }
 
 function initialize() {
