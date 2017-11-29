@@ -3,7 +3,6 @@
 let gameList = []
 let updateInterval
 let geneticManager
-let startAgain = true
 let gamesX = 10
 let gamesY = 10
 
@@ -18,21 +17,23 @@ function update() {
 
     if (!updated) {
         clearInterval(updateInterval)
-
-        //if (!startAgain) return
-        startAgain = false
-        const oldFlatNeuralNetworks = gameList.map((game) => {
-            game.clear()
-
-            return {
-                weights: game.neuralNetwork.getFlatWeights(),
-                fitness: game.neuralNetwork.fitness
-            }
-        })
-
-        const newFlatNeuralNetworks = geneticManager.process(oldFlatNeuralNetworks)
-        startGames(newFlatNeuralNetworks)
+        //setTimeout(endOfGame, 100)
+        endOfGame()
     }
+}
+
+function endOfGame() {
+    const oldFlatNeuralNetworks = gameList.map((game) => {
+        game.clear()
+
+        return {
+            weights: game.neuralNetwork.getFlatWeights(),
+            fitness: game.neuralNetwork.fitness
+        }
+    })
+
+    const newFlatNeuralNetworks = geneticManager.process(oldFlatNeuralNetworks)
+    startGames(newFlatNeuralNetworks)
 }
 
 function startGames(flatNeuralNetworks) {

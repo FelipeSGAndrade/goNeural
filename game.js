@@ -17,7 +17,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         const outputs = neuralNetwork.processInputs(inputs)
         ticks++
 
-        if (!processOutput(outputs) || ticks > 5)
+        if (!processOutput(outputs) || ticks > 10)
             endGame()
         else {
             neuralNetwork.fitness++
@@ -121,7 +121,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         neuralNetwork.fitness += playerY * 10
 
         if (neuralNetwork.fitness > 40) {
-            alert("WOW")
+            //alert("WOW")
         }
     }
 
