@@ -17,7 +17,6 @@ function update() {
 
     if (!updated) {
         clearInterval(updateInterval)
-        //setTimeout(endOfGame, 100)
         endOfGame()
     }
 }
@@ -45,12 +44,12 @@ function startGames(flatNeuralNetworks) {
     for (let i = 0; i < gamesX; i++) {
         for (let j = 0; j < gamesY; j++) {
             const neuralNetwork = CreateNeuralNetwork(flatNeuralNetworks[neuralCount] || null)
-            gameList.push(CreateGame(j * 60, i * 80, 10, 20, neuralNetwork))
+            gameList.push(CreateGame(j, i, 10, 20, neuralNetwork))
             neuralCount++
         }
     }
 
-    updateInterval = setInterval(update, 5)
+    updateInterval = setTimeout(update, 5)
 }
 
 function initialize() {

@@ -17,7 +17,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         const outputs = neuralNetwork.processInputs(inputs)
         ticks++
 
-        if (!processOutput(outputs) || ticks > 10)
+        if (!processOutput(outputs) || ticks > mapManager.mapHeight * 2)
             endGame()
         else {
             neuralNetwork.fitness++
@@ -118,7 +118,7 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
 
     function endGame() {
         if (alive) alive = false
-        neuralNetwork.fitness += playerY * 10
+        neuralNetwork.fitness += playerY * 100
 
         if (neuralNetwork.fitness > 40) {
             //alert("WOW")
@@ -133,8 +133,8 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
     game = document.createElement('div')
     game.style.position = 'absolute'
     game.style.border = '1px solid black'
-    game.style.left = (xoffset + margin) + 'px'
-    game.style.top = (yoffset + margin) + 'px'
+    game.style.left = ((xoffset * (mapManager.mapWidth + 1) * size) + margin) + 'px'
+    game.style.top = ((yoffset * (mapManager.mapHeight + 1) * size) + margin) + 'px'
 
     player = document.createElement('label')
     player.innerText = '*'
