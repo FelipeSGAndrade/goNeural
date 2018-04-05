@@ -18,12 +18,8 @@ function update() {
         }
     })
 
-    if (!updated) {
-        endOfGame()
-    }
-    else {
-        handleUpdate()
-    }
+    if (!updated) endOfGame()
+    else handleUpdate()
 }
 
 function endOfGame() {

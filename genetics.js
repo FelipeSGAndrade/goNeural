@@ -23,6 +23,24 @@ const CreateGeneticManager = () => {
         return inputGroup.sort((item1, item2) => item1.fitness - item2.fitness)
     }
 
+    const repeatedCrossovers = (quantity, inputGroup, selectionFunction, crossoverFunction, mutationFunction) => {
+
+        let allChildren = []
+        for (let i = 0; i < quantity; i++) {
+
+            const parents = selectionFunction(inputGroup)
+
+            const children = crossoverFunction(parents[0], parents[1])
+
+            children[0].weights = mutationFunction(children[0].weights)
+            children[1].weights = mutationFunction(children[1].weights)
+
+            allChildren = allChildren.concat(children)
+        }
+
+        return allChildren
+    }
+
     const randomSelection = (inputGroup) => {
         return [
             inputGroup[MathHelper.randomInt(0, inputGroup.length)],
@@ -58,22 +76,6 @@ const CreateGeneticManager = () => {
         return list.reduce((sum, current) => {
             return sum + current.fitness
         }, 0)
-    }
-
-    const repeatedCrossovers = (quantity, inputGroup, selectionFunction, crossoverFunction, mutationFunction) => {
-
-        let children = []
-        for (let i = 0; i < quantity; i++) {
-
-            const parents = selectionFunction(inputGroup)
-
-            children = children.concat(crossoverFunction(parents[0], parents[1]))
-
-            children[0].weights = mutationFunction(children[0].weights)
-            children[1].weights = mutationFunction(children[1].weights)
-        }
-
-        return children
     }
 
     const blockSwapCrossover = (parent1, parent2) => {
