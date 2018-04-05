@@ -2,8 +2,11 @@
 
 const CreateNeuralNetwork = function(flatNeuralNetworks) {
     let log = false
-    let topology = [10, 10, 10, 8, 4]
-    let activationFunctions = [null, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.boolean]
+    // let topology = [10, 10, 10, 8, 4]
+    // let activationFunctions = [null, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.sigmoid, MathHelper.boolean]
+    let baseTopology = [10, 10, 4]
+    let topology = baseTopology
+    let activationFunctions = [null, MathHelper.sigmoid, MathHelper.boolean]
     let weights = null
     let arestsCount = 0
     let fitness = 0
@@ -13,6 +16,10 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
         if (flatNeuralNetworks.topology) topology = flatNeuralNetworks.topology
         if (flatNeuralNetworks.activationFunctions) activationFunctions = flatNeuralNetworks.activationFunctions
         if (flatNeuralNetworks.weights) weights = flatNeuralNetworks.weights
+    }
+
+    if(baseTopology[0] === topology[0]) {
+        topology[0]++
     }
 
     topology.forEach((nodeCount, index) => {
@@ -34,9 +41,10 @@ const CreateNeuralNetwork = function(flatNeuralNetworks) {
     if (log) console.log("arests count:", arestsCount)
 
     function processInputs(inputs) {
-        if (!inputs.length || inputs.length !== topology[0]) {
+        if (!inputs.length || inputs.length !== topology[0] - 1) {
             throw new Error('invalid input length')
         }
+        inputs.push(1)
 
         let processed = inputs.slice()
         layers.forEach((layer) => {

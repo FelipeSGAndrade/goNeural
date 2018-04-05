@@ -47,7 +47,6 @@ const CreateGeneticManager = () => {
         for (let i = inputGroup.length - 1; i >= 0; i--) {
             partialSum += inputGroup[i].fitness
             if (partialSum >= pointer) {
-                console.log('selection: ' + i)
                 return inputGroup[i]
             }
         }

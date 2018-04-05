@@ -1,6 +1,6 @@
 'use strict'
 
-const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
+const CreateGame = function(xoffset, yoffset, size, margin, draw) {
     let log = false
     let player
     let playerX = 0
@@ -9,8 +9,9 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
     let game
     let alive = true
     let ticks = 0
+    let neuralNetwork = null
 
-    function update() {
+    function update(drawThis) {
         //randomCommand()
         const inputs = getInputs()
         if (log) console.log(inputs)
@@ -23,16 +24,18 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
             neuralNetwork.fitness++
         }
 
-        drawPlayer()
+        drawPlayer(drawThis)
     }
 
-    function drawPlayer() {
-        player.style.left = ((playerX * size)) + 'px'
-        player.style.top = ((playerY * size)) + 'px'
+    function drawPlayer(drawThis) {
+        if(draw && drawThis) {
+            player.style.left = ((playerX * size)) + 'px'
+            player.style.top = ((playerY * size)) + 'px'
 
-        if (mapManager.map[playerY][playerX] === 1) player.style.color = 'red'
-        else if (playerY > 3) player.style.color = 'green'
-        else player.style.color = 'black'
+            if (mapManager.map[playerY][playerX] === 1) player.style.color = 'red'
+            else if (playerY > 3) player.style.color = 'green'
+            else player.style.color = 'blue'
+        }
     }
 
     function getInputs() {
@@ -129,29 +132,44 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         game.remove()
     }
 
+    function startGame(newNeuralNetwork) {
+        neuralNetwork = newNeuralNetwork
+
+        playerX = mapManager.playerStart[0]
+        playerY = mapManager.playerStart[1]
+
+        drawPlayer()
+        alive = true
+        ticks = 0
+    }
+
+    function setup() {
+        if(draw) {
+            game = document.createElement('div')
+            game.style.position = 'absolute'
+            game.style.border = '1px solid black'
+            game.style.left = ((xoffset * (mapManager.mapWidth + 1) * size) + margin) + 'px'
+            game.style.top = ((yoffset * (mapManager.mapHeight + 1) * size) + margin) + 'px'
+
+            player = document.createElement('label')
+            player.innerText = '*'
+            player.style.position = 'absolute'
+            player.style.zIndex = '5'
+
+            game.appendChild(player)
+            document.body.appendChild(game)
+
+            mapManager.draw(game, size)
+
+            game.style.height = (mapManager.mapHeight * size) + 'px'
+            game.style.width = ((mapManager.mapWidth * size) - 2) + 'px'
+
+            drawPlayer()
+        }
+    }
+
     mapManager = CreateMapManager()
-    game = document.createElement('div')
-    game.style.position = 'absolute'
-    game.style.border = '1px solid black'
-    game.style.left = ((xoffset * (mapManager.mapWidth + 1) * size) + margin) + 'px'
-    game.style.top = ((yoffset * (mapManager.mapHeight + 1) * size) + margin) + 'px'
-
-    player = document.createElement('label')
-    player.innerText = '*'
-    player.style.position = 'absolute'
-    player.style.zIndex = '5'
-
-    game.appendChild(player)
-    document.body.appendChild(game)
-
-    mapManager.draw(game, size)
-    playerX = mapManager.playerStart[0]
-    playerY = mapManager.playerStart[1]
-
-    game.style.height = (mapManager.mapHeight * size) + 'px'
-    game.style.width = ((mapManager.mapWidth * size) - 2) + 'px'
-
-    drawPlayer()
+    setup()
 
     return {
         set log(bool) {
@@ -160,8 +178,11 @@ const CreateGame = function(xoffset, yoffset, size, margin, neuralNetwork) {
         get alive() {
             return alive
         },
+        get neuralNetwork() {
+            return neuralNetwork
+        },
         update: update,
-        neuralNetwork: neuralNetwork,
-        clear: clear
+        clear: clear,
+        startGame: startGame
     }
 }
