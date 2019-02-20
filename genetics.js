@@ -6,7 +6,7 @@ const CreateGeneticManager = () => {
         sortByFitnessDesc(inputGroup)
 
         const crossoverQtd = (inputGroup.length / 2) - 4
-        const children = repeatedCrossovers(crossoverQtd, inputGroup, wheelSelection, bitSwapCrossover, randomMutation)
+        const children = repeatedCrossovers(crossoverQtd, inputGroup, tournament2OutOfk, bitSwapCrossover, randomIncrementMutation)
         children.concat(blockSwapCrossover(inputGroup[0], inputGroup[1]))
 
         const survivalGroup = inputGroup.slice(0, inputGroup.length - children.length)
@@ -46,6 +46,53 @@ const CreateGeneticManager = () => {
             inputGroup[MathHelper.randomInt(0, inputGroup.length)],
             inputGroup[MathHelper.randomInt(0, inputGroup.length)]
         ]
+    }
+
+    const tournamentPairSelection = (inputGroup, k) => {
+        k = k || 3
+
+        return [
+            tournamentSelection(inputGroup, k),
+            tournamentSelection(inputGroup, k)
+        ]
+    }
+
+    const tournamentSelection = (inputGroup, k) => {
+        let bestFitness = 0
+        let bestParent = null
+
+        for (let i = 0; i < k; i++) {
+            const current = inputGroup[MathHelper.randomInt(0, inputGroup.length)]
+            if (current.fitness >= bestFitness) {
+                bestFitness = current.fitness
+                bestParent = current
+            }
+        }
+
+        return bestParent
+    }
+
+    const tournament2OutOfk = (inputGroup, k) => {
+        k = k || 5
+
+        let bestFitness = [-1, -1]
+        let bestParents = [null, null]
+
+        for (let i = 0; i < k; i++) {
+            const current = inputGroup[MathHelper.randomInt(0, inputGroup.length)]
+            if (current.fitness >= bestFitness[0]) {
+                bestFitness[1] = bestFitness[0]
+                bestParents[1] = bestParents[0]
+
+                bestFitness[0] = current.fitness
+                bestParents[0] = current
+            } else if (current.fitness >= bestFitness[1]) {
+                bestFitness[1] = current.fitness
+                bestParents[1] = current
+            }
+        }
+
+        return bestParents
     }
 
     const wheelSelection = (inputGroup) => {
@@ -132,28 +179,31 @@ const CreateGeneticManager = () => {
     }
 
     const randomMutation = (childWeights) => {
+        const noMutationChance = 5
+        const mutationMax = 10
+        let mutations = MathHelper.randomInt(0, noMutationChance + mutationMax + 1)
 
-        let mutations = MathHelper.randomInt(0, 20)
+        if (mutations <= noMutationChance) return childWeights
 
-        if (mutations < 10) return childWeights
-
-        mutations = mutations - 10
+        mutations = mutations - noMutationChance
 
         for (let i = 0; i < mutations; i++) {
             const gene = MathHelper.randomInt(0, childWeights.length)
-            childWeights[gene] = MathHelper.random(-1, 1)
+            const value = MathHelper.random(-1, 1)
+            childWeights[gene] = value
         }
 
         return childWeights
     }
 
     const randomIncrementMutation = (childWeights) => {
+        const noMutationChance = 5
+        const mutationMax = 1 
+        let mutations = MathHelper.randomInt(0, noMutationChance + mutationMax + 1)
 
-        let mutations = MathHelper.randomInt(0, 20)
+        if (mutations <= noMutationChance) return childWeights
 
-        if (mutations < 10) return childWeights
-
-        mutations = 1
+        mutations = mutations - noMutationChance
 
         for (let i = 0; i < mutations; i++) {
             const gene = MathHelper.randomInt(0, childWeights.length)

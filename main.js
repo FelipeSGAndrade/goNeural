@@ -6,7 +6,7 @@ let geneticManager
 let gamesX = 5
 let gamesY = 200
 let updateTime = 1
-let drawTreshould = 50
+let drawTreshould = 10
 let drawCount = drawTreshould
 
 function update() {
@@ -24,7 +24,6 @@ function update() {
 
 function endOfGame() {
     const oldFlatNeuralNetworks = gameList.map((game) => {
-        // game.clear()
 
         return {
             weights: game.neuralNetwork.getFlatWeights(),

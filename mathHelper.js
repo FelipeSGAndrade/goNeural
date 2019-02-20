@@ -17,6 +17,6 @@ const MathHelper = {
         return Math.floor((Math.random() * (max - min)) + min)
     },
     random: (min, max) => {
-        return (Math.random() * (max - min)) + min
+        return ((Math.random() * (max - min)) + min).toFixed(3)
     }
 }
