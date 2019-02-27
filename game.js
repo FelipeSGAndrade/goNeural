@@ -1,5 +1,6 @@
 'use strict'
 
+//teste de git
 const CreateGame = function(xoffset, yoffset, size, margin, draw) {
     let log = false
     let player
